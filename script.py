@@ -16,7 +16,7 @@ password = config['DEFAULT']['DB_PASS']
 # boto config
 session = boto3.session.Session(profile_name='kchung')
 s3 = session.resource('s3')
-bucket = s3.Bucket('kchungradio')
+bucket = s3.Bucket('archive.kchungradio.org')
 
 # connect to db
 conn = psycopg2.connect(
