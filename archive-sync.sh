@@ -1,6 +1,10 @@
 #!/bin/sh
 
 #
+#requires awscli to use s3 sync
+#
+
+#
 # set variables (use absolute filepaths)
 #
 s3log="/files/synced/from/local/to/s3/log.txt"
