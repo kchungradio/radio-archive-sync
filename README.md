@@ -1,5 +1,3 @@
-# radio-archive-s3-to-db-sync
-
 uploads files stored locally that don't exist to s3 storage 
 
 inserts a record into our database for any new file in the s3 
