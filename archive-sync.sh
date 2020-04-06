@@ -1,33 +1,33 @@
 #!/bin/sh
 
 #
-#requires awscli to use s3 sync
-#
-
-#
 # set variables (use absolute filepaths)
 #
-s3log="/files/synced/from/local/to/s3/log.txt"
-dblog="/new/entries/made/in/db/log.txt"
-localdir="/your/local/directory/to/sync"
-remotedir="s3://your.s3.name"
+
+s3_log="/var/log/kchung/s3_log.txt"
+db_log="/var/log/kchung/db_log.txt"
+local_dir="/path/to/archive"
+remote_dir="s3://archive.kchungradio.org"
+
+#
+# s3 sync, requires awscli
 #
 
-printf "`date '+%Y-%m-%d  %H:%M:%S'`\n" >> $log
+printf "`date '+%Y-%m-%d  %H:%M:%S'`\n" >> $s3_log
 
-/usr/local/bin/aws s3 sync --exclude "*" --include "*.mp3" --no-progress $localdir $remotedir >> $s3log 2>&1
+/usr/local/bin/aws s3 sync --exclude "*" --include "*.mp3" --no-progress $local_dir $remote_dir >> $s3_log 2>&1
 
-printf "`date '+%Y-%m-%d  %H:%M:%S'`\n" >> $s3log
-printf "\n" >> $s3log
+printf "`date '+%Y-%m-%d  %H:%M:%S'`\n" >> $s3_log
+printf "\n" >> $s3_log
 
 
 #
 # sync s3 to db
 #
 
-printf "`date '+%Y-%m-%d  %H:%M:%S'`\n" >> $dblog
+printf "`date '+%Y-%m-%d  %H:%M:%S'`\n" >> $db_log
 
-/usr/local/bin/pipenv run python sync.py >> $dblog 2>&1
+/usr/local/bin/pipenv run python sync.py >> $db_log 2>&1
 
-printf "`date '+%Y-%m-%d  %H:%M:%S'`\n" >> $dblog
-printf "\n" >> $dblog
+printf "`date '+%Y-%m-%d  %H:%M:%S'`\n" >> $db_log
+printf "\n" >> $db_log
