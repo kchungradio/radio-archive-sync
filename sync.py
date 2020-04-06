@@ -13,7 +13,7 @@ dbname = config['DEFAULT']['DB_NAME']
 user = config['DEFAULT']['DB_USER']
 password = config['DEFAULT']['DB_PASS']
 
-# boto config
+# login to s3 using boto config
 session = boto3.session.Session(profile_name='kchung')
 s3 = session.resource('s3')
 bucket = s3.Bucket('archive.kchungradio.org')
