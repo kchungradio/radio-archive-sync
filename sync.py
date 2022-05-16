@@ -40,7 +40,7 @@ now = datetime.now()
 for object in bucket.objects.all():
     path = object.key
 
-    if path.endswith((
+    if not path.endswith((
         '.mp3', '.MP3',
         '.m4a', '.M4A',
         '.mp4', '.MP4',
@@ -48,37 +48,38 @@ for object in bucket.objects.all():
         '.aif', '.AIF',
         '.wav', '.WAV'
         )):
+        continue
 
-        # filename = path.split('/')[-1]
-        date = path.split('/')[0][:10]
+    # filename = path.split('/')[-1]
+    date = path.split('/')[0][:10]
 
-        if not valiDate(date):
-            continue
+    if not valiDate(date):
+        continue
 
-        if date < '2021-12-31': # skip old dates
-            continue
+    if date < '2021-12-31': # skip old dates
+        continue
 
-        # lookup file in db
-        cursor.execute('''
-        SELECT id FROM radio.archive
-        WHERE path = %s
-        ''', [path])
-        row = cursor.fetchone()
+    # lookup file in db
+    cursor.execute('''
+    SELECT id FROM radio.archive
+    WHERE path = %s
+    ''', [path])
+    row = cursor.fetchone()
 
-        # if record exists, do nothing
-        if row:
-            continue
+    # if record exists, do nothing
+    if row:
+        continue
 
-        print(path)
+    print(path)
 
-        # insert into db
-        cursor.execute('''
-        INSERT INTO radio.archive
-        (path, date, created_at, created_by)
-        VALUES (%s, %s, %s, %s)
-        ON CONFLICT (path) DO NOTHING
-        ''',
-        (path, date, now, app_name))
+    # insert into db
+    cursor.execute('''
+    INSERT INTO radio.archive
+    (path, date, created_at, created_by)
+    VALUES (%s, %s, %s, %s)
+    ON CONFLICT (path) DO NOTHING
+    ''',
+    (path, date, now, app_name))
 
 conn.commit()
 cursor.close()
