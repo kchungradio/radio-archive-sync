@@ -40,6 +40,8 @@ now = datetime.now()
 for object in bucket.objects.all():
     path = object.key
 
+    print(path)
+
     if not path.endswith((
         '.mp3', '.MP3',
         '.m4a', '.M4A',
@@ -70,7 +72,7 @@ for object in bucket.objects.all():
     if row:
         continue
 
-    print(path)
+    print('=====================SUCCESS=====================')
 
     # insert into db
     cursor.execute('''
