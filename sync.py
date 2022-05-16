@@ -5,6 +5,14 @@ from getpass import getpass
 import boto3
 import psycopg2
 
+def valiDate(date_text):
+    try:
+        if date_text != datetime.strptime(date_text, "%Y-%m-%d").strftime('%Y-%m-%d'):
+            raise ValueError
+        return True
+    except ValueError:
+        return False
+
 # get db config
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -43,6 +51,12 @@ for object in bucket.objects.all():
 
         # filename = path.split('/')[-1]
         date = path.split('/')[0][:10]
+
+        if not valiDate(date):
+            continue
+
+        if date < '2021-12-31': # skip old dates
+            continue
 
         # lookup file in db
         cursor.execute('''
