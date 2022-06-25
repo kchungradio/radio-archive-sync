@@ -1,5 +1,5 @@
 import configparser
-from datetime import datetime
+from datetime import datetime, timedelta
 from getpass import getpass
 
 import boto3
@@ -36,6 +36,7 @@ cursor = conn.cursor()
 
 app_name = 'sync'
 now = datetime.now()
+six_months_ago = now - timedelta(days=183)
 
 for object in bucket.objects.all():
     path = object.key
@@ -58,7 +59,7 @@ for object in bucket.objects.all():
     if not valiDate(date):
         continue
 
-    if date < '2021-12-31': # skip old dates
+    if datetime.fromisoformat(date) < six_months_ago: # skip old dates
         continue
 
     # lookup file in db
@@ -72,8 +73,6 @@ for object in bucket.objects.all():
     if row:
         continue
 
-    print('=====================SUCCESS=====================')
-
     # insert into db
     cursor.execute('''
     INSERT INTO radio.archive
@@ -82,6 +81,8 @@ for object in bucket.objects.all():
     ON CONFLICT (path) DO NOTHING
     ''',
     (path, date, now, app_name))
+
+    print('=====================SUCCESS=====================')
 
 conn.commit()
 cursor.close()
