@@ -1,8 +1,8 @@
 import configparser
 from datetime import datetime, timedelta
-from getpass import getpass
 
 import boto3
+import boto3.session
 import psycopg2
 
 def valiDate(date_text):
@@ -16,13 +16,18 @@ def valiDate(date_text):
 # get db config
 config = configparser.ConfigParser()
 config.read('config.ini')
+aws_access_key_id = config['DEFAULT']['AWS_ACCESS_KEY_ID']
+aws_secret_access_key = config['DEFAULT']['AWS_SECRET_ACCESS_KEY']
 host = config['DEFAULT']['DB_HOST']
 dbname = config['DEFAULT']['DB_NAME']
 user = config['DEFAULT']['DB_USER']
 password = config['DEFAULT']['DB_PASS']
 
 # login to s3 using boto config
-session = boto3.session.Session(profile_name='kchung')
+session = boto3.session.Session(
+    aws_access_key_id = aws_access_key_id,
+    aws_secret_access_key = aws_secret_access_key
+)
 s3 = session.resource('s3')
 bucket = s3.Bucket('archive.kchungradio.org')
 
@@ -40,8 +45,6 @@ six_months_ago = now - timedelta(days=183)
 
 for object in bucket.objects.all():
     path = object.key
-
-    print(path)
 
     if not path.endswith((
         '.mp3', '.MP3',
@@ -82,9 +85,8 @@ for object in bucket.objects.all():
     ''',
     (path, date, now, app_name))
 
-    print('=====================SUCCESS=====================')
+    print(path)
 
 conn.commit()
 cursor.close()
 conn.close()
-
