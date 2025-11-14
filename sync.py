@@ -87,6 +87,8 @@ for object in bucket.objects.all():
 
     print(path)
 
+print('done')
+
 conn.commit()
 cursor.close()
 conn.close()
