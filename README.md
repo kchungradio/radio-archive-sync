@@ -27,9 +27,12 @@ run the script locally
 
 create `config.ini` with credentials
 (see `config.example.ini` for format)
-`brew install pipenv`
-`brew install postgresql`
-`pipenv install`
+
+```
+brew install pipenv
+brew install postgresql
+pipenv install
+```
 
 if you get errors or need help, ask on slack (`#archive-help`)
 
@@ -63,8 +66,8 @@ runs s3 to db sync script on aws ecs fargate
 
 ## References
 
-https://towardsdatascience.com/deploying-a-docker-container-with-ecs-and-fargate-7b0cbc9cd608
+<https://towardsdatascience.com/deploying-a-docker-container-with-ecs-and-fargate-7b0cbc9cd608>
 
-https://faun.pub/creating-an-ecs-scheduled-task-using-aws-cdk-a5a650ef36e8
+<https://faun.pub/creating-an-ecs-scheduled-task-using-aws-cdk-a5a650ef36e8>
 
-https://github.com/shashimal/cdk-ecs-scheduled-task
+<https://github.com/shashimal/cdk-ecs-scheduled-task>
